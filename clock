@@ -113,6 +113,20 @@ def write_changes(lines):
 
 
 # ==================
+# handle_input:
+# Check input while running, and perform any action nessecary
+# ==================
+
+def handle_input(i, start):
+	if i.lower() == 't':
+		diff = int(time.time() - start)
+		minutes = int(diff / 60)
+		hours = int(minutes / 60)
+		minutes %= 60
+		print(f'Current Running Time: {hours}:{minutes}')
+
+
+# ==================
 # run_time:
 # Capture a start time and compare it to an end time after waiting for the user to quit, returns and integer
 # value representing the seconds elapsed
@@ -121,12 +135,14 @@ def write_changes(lines):
 def run_time():
 	print('\n\n********************************\n')
 	print('\n---- You have clocked in... ----\n')
-	print('\n * Enter [q] to end\n')
+	print('\n * Enter [t] to show current time')
+	print(' * Enter [q] to end\n')
 	print('********************************\n')
 	start = time.time()
 	i = ''
 	while i.lower() != 'q':
 		i = input('> ')
+		handle_input(i, start)
 	end = time.time()
 	seconds = int(end - start)
 	return seconds
