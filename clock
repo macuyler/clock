@@ -1,9 +1,18 @@
 #!/usr/bin/env python3
 
 from datetime import datetime
-import time
+from pathlib import Path
+import time, sys
 
-file_path = '/Users/macuylerdunn/Documents/work/CodeChangers/codechangers-hours.txt'
+file_path = ''
+try:
+	conf = open(f'{Path.home()}/.clock.conf', 'r').read()
+	file_path = conf.strip()
+except FileNotFoundError:
+	print('\n * No config file found!')
+	print('   Create ~/.clock.conf and put the path to your clock log file inside it.')
+	print('   See the README.md for more details.\n')
+	sys.exit(0)
 
 
 # ==================
@@ -22,9 +31,15 @@ def get_date():
 # ==================
 
 def get_hours():
-	hours_file = open(file_path, 'r')
-	hours = hours_file.readlines()
-	hours_file.close()
+	try:
+		hours_file = open(file_path, 'r')
+		hours = hours_file.readlines()
+		hours_file.close()
+	except FileNotFoundError:
+		print('\n * Invalid file path!')
+		print('   Make sure you are using an absolute path, ie. /home/user/ instead of ~/')
+		print('   See the README.md for more details.\n')
+		sys.exit(0)
 	return hours
 
 
@@ -106,10 +121,20 @@ def check_weekend(week_hours):
 # ==================
 
 def write_changes(lines):
-	hours_file = open(file_path, 'w')
-	for line in lines:
-		hours_file.write(line)
-	hours_file.close()
+	try:
+		hours_file = open(file_path, 'w')
+		for line in lines:
+			hours_file.write(line)
+		hours_file.close()
+	except FileNotFoundError:
+		print('\n * Invalid file path!')
+		print('   Make sure you are using an absolute path, ie. /home/user/ instead of ~/')
+		print('   See the README.md for more details.\n')
+		print(" * Don't lose these:")
+		for line in lines:
+			print(line)
+		print()
+		sys.exit(0)
 
 
 # ==================
