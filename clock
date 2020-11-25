@@ -2,17 +2,18 @@
 
 from datetime import datetime, timedelta
 from pathlib import Path
-import time, sys
+import time
+import sys
 
 file_path = ''
 try:
     conf = open(f'{Path.home()}/.clock.conf', 'r').read()
     file_path = conf.strip()
 except FileNotFoundError:
-	print('\n * No config file found!')
-	print('   Create ~/.clock.conf and put the path to your clock log file inside it.')
-	print('   See the README.md for more details.\n')
-	sys.exit(0)
+    print('\n * No config file found!')
+    print('   Create ~/.clock.conf and put the path to your clock log file inside it.')
+    print('   See the README.md for more details.\n')
+    sys.exit(0)
 
 
 def get_date():
@@ -59,7 +60,7 @@ def get_week(hours, week_hours):
         return week_hours
     return get_week(hours, week_hours)
 
- 
+
 def get_total(wh):
     """
     Calculate the total hours and minutes from the given week and return them as a string.
@@ -90,7 +91,7 @@ def backfill(week_hours):
     Fill in previously unlogged dates with 0s.
     """
     filled_week_hours = week_hours[0:1]
-    a_day = timedelta(days = 1)
+    a_day = timedelta(days=1)
     for i in range(len(week_hours)):
         if i > 1:
             prev = parse_date(week_hours[i - 1])
@@ -185,7 +186,7 @@ def add_time(s, week_hours):
     total_hours = int(total_minutes / 60)
     total_minutes %= 60
     new_line = f'\t{get_date()}: {total_hours}:{total_minutes}HR\n'
-    current_date_lines = [ '', new_line ] # First value is removed in get_total
+    current_date_lines = ['', new_line]  # First value is removed in get_total
     duplicate_indexes = []
     print(f'\n\nClocked for = {total_hours}:{total_minutes}HR\n')
     for i in range(len(week_hours)):
@@ -215,6 +216,6 @@ def main():
     new_hours = all_hours + checked_hours
     write_changes(new_hours)
 
-if __name__ == '__main__':
-	main()
 
+if __name__ == '__main__':
+    main()
