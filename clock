@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 import time, sys
 
@@ -21,6 +21,14 @@ def get_date():
     """
     p_date = str(datetime.date(datetime.now())).split('-')
     return f'{p_date[1]}/{p_date[2]}/{p_date[0][2::]}'
+
+
+def parse_date(line):
+    """
+    Convert a log line into a datetime object.
+    """
+    date_string = line.split(':')[0].strip()
+    return datetime.strptime(date_string, "%m/%d/%y")
 
 
 def get_hours():
@@ -77,10 +85,29 @@ def get_week_num(prev_week):
     return str(int(prev_week.replace('Week ', '').replace(':', '').strip()) + 1)
 
 
+def backfill(week_hours):
+    """
+    Fill in previously unlogged dates with 0s.
+    """
+    filled_week_hours = week_hours[0:1]
+    a_day = timedelta(days = 1)
+    for i in range(len(week_hours)):
+        if i > 1:
+            prev = parse_date(week_hours[i - 1])
+            current = parse_date(week_hours[i])
+            filled_week_hours.append(week_hours[i - 1])
+            while prev + a_day != current:
+                prev += a_day
+                filled_week_hours.append(f'\t{prev.strftime("%m/%d/%y")}: 0:00HR\n')
+    filled_week_hours.append(week_hours[len(week_hours) - 1])
+    return filled_week_hours
+
+
 def check_weekend(week_hours):
     """
     Check if the current week has ended, and add a total and new week line before continuing.
     """
+    week_hours = backfill(week_hours)
     if len(week_hours) > 8:
         last_week = []
         new_week = []
