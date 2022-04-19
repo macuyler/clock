@@ -20,9 +20,23 @@ class Config:
     def __init__(self, conf_path: str=CONFIG_PATH):
         self.path = Path(conf_path)
         self.profiles = {}
+        self._touch()
+        self._load()
+        self._validate()
 
 
-    def touch(self):
+    def profile(self, name:str) -> Path:
+        """Get the path for a given profile name."""
+
+        path = list(self.profiles.values())[0]
+
+        if name in self.profiles:
+            path = self.profiles[name]
+
+        return Path(path)
+
+
+    def _touch(self):
         """Create a new config file, if one doesn't exist."""
 
         if not self.path.parent.exists():
@@ -31,7 +45,7 @@ class Config:
         self.path.touch()
 
 
-    def load(self):
+    def _load(self):
         """Load all profiles from the config file."""
 
         delim = ':'
@@ -45,7 +59,7 @@ class Config:
                 self.profiles[name] = path.strip()
 
 
-    def validate(self):
+    def _validate(self):
         """Remove any profile with an invalid path."""
 
         invalid = []
@@ -55,14 +69,3 @@ class Config:
 
         for name in invalid:
             del self.profiles[name]
-
-
-    def profile(self, name:str) -> Path:
-        """Get the path for a given profile name."""
-
-        path = list(self.profiles.values())[0]
-
-        if name in self.profiles:
-            path = self.profiles[name]
-
-        return Path(path)
