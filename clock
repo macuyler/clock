@@ -1,154 +1,166 @@
 #!/usr/bin/env python3
 
+"""This is a work timing script that is designed to automate tracking my hours for work."""
+
+import sys
+import time
 from datetime import datetime, timedelta
 from pathlib import Path
-import time
-import sys
-
-file_path = ''
-try:
-    conf = open(f'{Path.home()}/.clock.conf', 'r').read()
-    file_path = conf.strip()
-except FileNotFoundError:
-    print('\n * No config file found!')
-    print('   Create ~/.clock.conf and put the path to your clock log file inside it.')
-    print('   See the README.md for more details.\n')
-    sys.exit(0)
 
 
-def get_date():
-    """
-    Returns the current date in the same format used within the file.
-    """
+def config() -> str:
+    """Read the configuration file at ~/.clock.conf"""
+
+    file_path = ''
+
+    try:
+        with open(f'{Path.home()}/.clock.conf', 'r', encoding='utf-8') as conf_file:
+            configuration = conf_file.read()
+        file_path = configuration.strip()
+    except FileNotFoundError:
+        print('\n * No config file found!')
+        print('   Create ~/.clock.conf and put the path to your clock log file inside it.')
+        print('   See the README.md for more details.\n')
+        sys.exit(0)
+
+    return file_path
+
+
+def get_date() -> str:
+    """Get the current formatted date."""
+
     p_date = str(datetime.date(datetime.now())).split('-')
     return f'{p_date[1]}/{p_date[2]}/{p_date[0][2::]}'
 
 
-def parse_date(line):
-    """
-    Convert a log line into a datetime object.
-    """
+def parse_date(line: str) -> datetime:
+    """Parse the date from a logged line."""
+
     date_string = line.split(':')[0].strip()
     return datetime.strptime(date_string, "%m/%d/%y")
 
 
-def get_hours():
-    """
-    Read all lines from the file at the file_path and return them as a list.
-    """
+def get_hours(log_path: str) -> list[str]:
+    """Read the lines of a log file."""
+
+    hours = []
+
     try:
-        hours_file = open(file_path, 'r')
-        hours = hours_file.readlines()
-        hours_file.close()
+        with open(log_path, 'r', encoding='utf-8') as log_file:
+            hours = log_file.readlines()
     except FileNotFoundError:
         print('\n * Invalid file path!')
         print('   Make sure you are using an absolute path, ie. /home/user/ instead of ~/')
         print('   See the README.md for more details.\n')
         sys.exit(0)
+
     return hours
 
 
-def get_week(hours, week_hours):
-    """
-    Find all lines from the end of the file until the first 'Week' line and return them as a list.
-    """
+def get_week(hours: list[str], week_hours: list[str]) -> list[str]:
+    """Recursively parse the last week in the logs."""
+
     i = len(hours) - 1
     line = hours[i]
     hours.pop(i)
     week_hours.insert(0, line)
     if 'Week' in line:
         return week_hours
+
     return get_week(hours, week_hours)
 
 
-def get_total(wh):
-    """
-    Calculate the total hours and minutes from the given week and return them as a string.
-    """
-    week_hours = wh[1::]
+def get_total(week_hours: list[str]) -> str:
+    """Calculate and format the total time worked in a week."""
+
     total_hours = 0
     total_minutes = 0
-    for line in week_hours:
-        time = line.split(': ')[1].replace('HR', '').strip().split(':')
-        total_hours += int(time[0])
-        total_minutes += int(time[1])
+    week_hours = week_hours[1::]
+
+    for day in week_hours:
+        hours = day.split(': ')[1].replace('HR', '').strip().split(':')
+        total_hours += int(hours[0])
+        total_minutes += int(hours[1])
+
     total_hours += int(total_minutes / 60)
     total_minutes = total_minutes % 60
+
     if total_minutes < 10:
         total_minutes = f'0{total_minutes}'
+
     return f'{total_hours}:{total_minutes}HR'
 
 
-def get_week_num(prev_week):
-    """
-    Return then next week number based on the given week string.
-    """
+def get_week_num(prev_week: str) -> str:
+    """Calculate the current week number."""
+
     return str(int(prev_week.replace('Week ', '').replace(':', '').strip()) + 1)
 
 
-def backfill(week_hours):
-    """
-    Fill in previously unlogged dates with 0s.
-    """
-    filled_week_hours = week_hours[0:1]
+def backfill(week_hours: list[str]) -> list[str]:
+    """Fill in missing dates with 00s."""
+
     a_day = timedelta(days=1)
-    for i in range(len(week_hours)):
+    filled_week_hours = week_hours[0:1]
+
+    for i, today in enumerate(week_hours):
         if i > 1:
-            prev = parse_date(week_hours[i - 1])
-            current = parse_date(week_hours[i])
-            filled_week_hours.append(week_hours[i - 1])
+            yesterday = week_hours[i - 1]
+            prev = parse_date(yesterday)
+            current = parse_date(today)
+            filled_week_hours.append(yesterday)
+
             while prev + a_day != current:
                 prev += a_day
                 filled_week_hours.append(f'\t{prev.strftime("%m/%d/%y")}: 0:00HR\n')
+
     filled_week_hours.append(week_hours[len(week_hours) - 1])
+
     return filled_week_hours
 
 
-def check_weekend(week_hours):
-    """
-    Check if the current week has ended, and add a total and new week line before continuing.
-    """
+def check_weekend(week_hours: list[str]) -> list[str]:
+    """Calculate the total and start a new week after 7 days."""
+
     week_hours = backfill(week_hours)
     if len(week_hours) > 8:
         last_week = []
         new_week = []
-        for i in range(len(week_hours)):
-            line = week_hours[i]
+
+        for i, line in enumerate(week_hours):
             if i <= 7:
                 last_week.append(line)
             else:
                 new_week.append(line)
+
         total = get_total(last_week)
         week_num = get_week_num(last_week[0])
-        new_lines = last_week + ['\n', f'\tTotal = {total}\n', f'Week {week_num}:\n'] + new_week
-        return new_lines
+        weekend = ['\n', f'\tTotal = {total}\n', f'Week {week_num}:\n']
+        week_hours = last_week + weekend + new_week
+
     return week_hours
 
 
-def write_changes(lines):
-    """
-    Write a list of lines to the file at the file_path.
-    """
+def write_changes(log_path: str, lines: list[str]):
+    """Write the given lines to the log file."""
+
+    output = ''.join(lines)
+
     try:
-        hours_file = open(file_path, 'w')
-        for line in lines:
-            hours_file.write(line)
-        hours_file.close()
+        with open(log_path, 'w', encoding='utf-8') as log_file:
+            log_file.write(output)
     except FileNotFoundError:
         print('\n * Invalid file path!')
         print('   Make sure you are using an absolute path, ie. /home/user/ instead of ~/')
         print('   See the README.md for more details.\n')
         print(" * Don't lose these:")
-        for line in lines:
-            print(line)
-        print()
+        print(f'\n{output}\n')
         sys.exit(0)
 
 
-def handle_input(i, start):
-    """
-    Check input while running, and perform any action nessecary.
-    """
+def handle_input(i: str, start: time):
+    """Parse and handle user input."""
+
     if i.lower() == 't':
         diff = int(time.time() - start)
         minutes = int(diff / 60)
@@ -157,64 +169,64 @@ def handle_input(i, start):
         print(f'Current Running Time: {hours}:{minutes}')
 
 
-def run_time():
-    """
-    Capture a start time and compare it to an end time after waiting for the user to quit,
-    returns and integer value representing the seconds elapsed.
-    """
+def run_time() -> int:
+    """Start a timer and run an infinite loop."""
+
     print('\n\n********************************\n')
     print('\n---- You have clocked in... ----\n')
     print('\n * Enter [t] to show current time')
     print(' * Enter [q] to end\n')
     print('********************************\n')
+
     start = time.time()
+
     i = ''
     while i.lower() != 'q':
         i = input('> ')
         handle_input(i, start)
+
     end = time.time()
     seconds = int(end - start)
     return seconds
 
 
-def add_time(s, week_hours):
-    """
-    Calculate the total hours and minutes from the seconds given, total this with any other
-    times from the current date and add the most current data to the file.
-    """
-    total_minutes = int(s / 60)
+def add_time(seconds: int, week_hours: list[str]):
+    """Merge the time worked into the week_hours list."""
+
+    total_minutes = int(seconds / 60)
     total_hours = int(total_minutes / 60)
     total_minutes %= 60
+
     new_line = f'\t{get_date()}: {total_hours}:{total_minutes}HR\n'
-    current_date_lines = ['', new_line]  # First value is removed in get_total
+    current_date_lines = ['', new_line] # get_total removes the first value
     duplicate_indexes = []
+
     print(f'\n\nClocked for = {total_hours}:{total_minutes}HR\n')
-    for i in range(len(week_hours)):
-        line = week_hours[i]
+
+    for i, line in enumerate(week_hours):
         if get_date() in line:
             current_date_lines.append(line)
             duplicate_indexes.append(i)
-    for j in range(len(duplicate_indexes)):
-        i = duplicate_indexes[j]
+
+    for j, i in enumerate(duplicate_indexes):
         week_hours.pop(i - j)
+
     new_time = get_total(current_date_lines)
     new_line = f'\t{get_date()}: {new_time}\n'
     week_hours.append(new_line)
 
 
 def main():
-    """
-    Read the current state into memory, get this current weeks hours, run a timer, add the time, save the changes.
-    """
-    all_hours = get_hours()
+    """Run the clock process."""
+
+    log_path = config()
+    all_hours = get_hours(log_path)
     week_hours = get_week(all_hours, [])
-    s = run_time()
-    add_time(s, week_hours)
-    # Check for a weekend
+    seconds = run_time()
+    add_time(seconds, week_hours)
     checked_hours = check_weekend(week_hours)
-    # Save changes after running
     new_hours = all_hours + checked_hours
-    write_changes(new_hours)
+    write_changes(log_path, new_hours)
 
 
 if __name__ == '__main__':
