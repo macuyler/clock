@@ -2,10 +2,10 @@
 
 The config file is located at ~/.config/clock/clock.conf
 
-Config Format:
+* Config Format:
 profile:/Absolute/Path/to/file.txt
 
-Example Config:
+* Example Config:
 work:/Users/user/Documents/work/hours.txt
 school:/Users/user/Documents/school-hours.txt
 """

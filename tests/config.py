@@ -44,6 +44,29 @@ class TestConfig(unittest.TestCase):
         cleanup(conf_path, log_path)
 
 
+    def test_profiles(self):
+        """Test that profiles can be queried."""
+
+        conf_path = f'{Path.home()}/.config/clock/test.conf'
+        log_path1 = f'{Path.home()}/hours1.txt'
+        log_path2 = f'{Path.home()}/hours2.txt'
+
+        test_profiles = [f'work:{log_path1}',
+                         f'school:{log_path2}']
+
+
+        setup((conf_path, '\n'.join(test_profiles)),
+              (log_path1, None),
+              (log_path2, None))
+
+        conf = Config(conf_path)
+        msg = 'You should be able to query config profiles.'
+        self.assertEqual(conf.profile('work'), Path(log_path1), msg)
+        self.assertEqual(conf.profile('school'), Path(log_path2), msg)
+
+        cleanup(conf_path, log_path1, log_path2)
+
+
 def setup(*files:(str, str)):
     """Setup test files."""
 
