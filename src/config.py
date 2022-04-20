@@ -12,6 +12,7 @@ school:/Users/user/Documents/school-hours.txt
 
 import os
 from pathlib import Path
+from typing import Optional
 
 CONFIG_PATH = f'{Path.home()}/.config/clock/clock.conf'
 
@@ -25,15 +26,15 @@ class Config:
         self._validate()
 
 
-    def profile(self, name:str) -> Path:
+    def profile(self, name:str) -> Optional[Path]:
         """Get the path for a given profile name."""
 
-        path = list(self.profiles.values())[0]
+        path = None
 
         if name in self.profiles:
-            path = self.profiles[name]
+            path = Path(self.profiles[name])
 
-        return Path(path)
+        return path
 
 
     def _touch(self):

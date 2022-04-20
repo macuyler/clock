@@ -63,6 +63,8 @@ class TestConfig(unittest.TestCase):
         msg = 'You should be able to query config profiles.'
         self.assertEqual(conf.profile('work'), Path(log_path1), msg)
         self.assertEqual(conf.profile('school'), Path(log_path2), msg)
+        msg = 'None should be returned for invalid profiles.'
+        self.assertEqual(conf.profile(''), None, msg)
 
         cleanup(conf_path, log_path1, log_path2)
 
