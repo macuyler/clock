@@ -20,10 +20,9 @@ class Day:
 
     def __str__(self):
         date_str = self.date.strftime(DATE_FORMAT)
-        hours_str = str(int(self.time)).rjust(2, '0')
-        mins_str = str(int(self.time * 100) % 100)
+        time_str = format_time(self.time)
 
-        return f'{date_str}={hours_str}:{mins_str}'
+        return f'{date_str}={time_str}'
 
 
 def day(string:str) -> Optional[Day]:
@@ -40,3 +39,11 @@ def day(string:str) -> Optional[Day]:
         out = Day(date, time)
 
     return out
+
+
+def format_time(time:float):
+    """Format decimal hours as a HR:MN string."""
+
+    hours_str = str(int(time)).rjust(2, '0')
+    mins_str = str(int(time * 100) % 100).rjust(2, '0')
+    return f'{hours_str}:{mins_str}'
