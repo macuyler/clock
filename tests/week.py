@@ -2,7 +2,6 @@
 
 import unittest
 
-from src.day import Day, format_time
 from src.week import Week
 
 
