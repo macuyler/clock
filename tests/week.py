@@ -2,15 +2,37 @@
 
 import unittest
 
+from src.day import Day, format_time
 from src.week import Week
 
 
 class TestWeek(unittest.TestCase):
 
-    def test_stuff(self):
-        days = ['01/01/22=00:01', '01/02/22=10:01']
-        print(Week(0, days))
-        self.assertEqual(0 , 0)
+    def test_total(self):
+        msg = 'The total hours logged in a week should be calculated.'
+        week_num = 12
+
+        days = ['04/24/22=01:01',
+                '04/25/22=03:23',
+                '04/26/22=00:30',
+                '04/27/22=05:03',
+                '04/28/22=02:10',
+                '04/29/22=10:45',
+                '04/30/22=08:32']
+
+        result = Week(week_num, days).total
+        expected = 31.4
+        self.assertEqual(result, expected, msg)
+
+        days = ['05/01/22=90:30',
+                '05/02/22=95:30',
+                '05/03/22=95:30',
+                '05/04/22=95:30']
+
+        result = Week(week_num, days).total
+        expected = 377.0
+        self.assertEqual(result, expected, msg)
+
 
 
 if __name__ == '__main__':
