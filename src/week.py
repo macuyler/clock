@@ -25,3 +25,7 @@ class Week:
         days = list(map(str, self.days))
         footer = f'-- Total={self.total}'
         return '\n'.join([header, *days, footer])
+
+
+    def __eq__(self, other):
+        return self.days == other.days

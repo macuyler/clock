@@ -28,6 +28,10 @@ class Day:
         return self.date < other.date
 
 
+    def __eq__(self, other):
+        return self.date == other.date and self.time == other.time
+
+
 def str_to_day(string:str) -> Optional[Day]:
     """Attempt to convert a string into a Day object."""
 

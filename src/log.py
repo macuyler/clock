@@ -42,7 +42,7 @@ class Log:
         days = rectify(days)
 
         week_length = 7
-        week_days = [ days[i:i+week_length] for i in range(0, len(days), week_length)]
+        week_days = [days[i:i+week_length] for i in range(0, len(days), week_length)]
         # Ref: https://www.geeksforgeeks.org/break-list-chunks-size-n-python/
 
         for i, week in enumerate(week_days):
@@ -53,6 +53,7 @@ class Log:
 
 
     def __str__(self):
+        # TODO: Add Grand Total Line...
         return '\n'.join(map(str, self.weeks))
 
 
