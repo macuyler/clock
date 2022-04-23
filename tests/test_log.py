@@ -6,7 +6,7 @@ from pathlib import Path
 from src.log import Log
 from src.week import Week
 
-from tests import setup
+from tests import cleanup, setup
 
 
 class TestLog(unittest.TestCase):
@@ -61,6 +61,8 @@ class TestLog(unittest.TestCase):
         expected = [Week(1, week1), Week(2, week2), Week(3, week3)]
         msg = 'Logs should be parsed and organized into weeks.'
         self.assertEqual(result, expected, msg)
+
+        cleanup(log_path)
 
 
 if __name__ == '__main__':
