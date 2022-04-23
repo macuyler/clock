@@ -24,10 +24,6 @@ class TestWeek(unittest.TestCase):
         expected = hmt(31, 24)
         self.assertEqual(result, expected, msg)
 
-        result = Week(week_num, days)
-        expected = '\n'.join([f'- Week {week_num}:', *days, '-- Total=31:24'])
-        self.assertEqual(str(result), expected, msg)
-
         days = ['05/01/22=90:30',
                 '05/02/22=95:30',
                 '05/03/22=95:30',
@@ -37,6 +33,24 @@ class TestWeek(unittest.TestCase):
         expected = hmt(377, 0)
         self.assertEqual(result, expected, msg)
 
+
+    def test_week_to_string(self):
+        msg = 'Weeks should be formatted when converted to a string.'
+        days = ['05/01/22=01:00',
+                '05/02/22=01:00',
+                '05/03/22=01:00',
+                '05/04/22=01:00',
+                '05/05/22=01:00',
+                '05/06/22=01:00',
+                '05/07/22=01:00']
+
+        result = str(Week(1, days))
+        expected = '\n'.join(['- Week 1:', *days, '-- Total=07:00'])
+        self.assertEqual(result, expected, msg)
+
+        result = str(Week(5, days[:4]))
+        expected = '\n'.join(['- Week 5:', *days[:4], '-- Total=04:00'])
+        self.assertEqual(result, expected, msg)
 
 
 if __name__ == '__main__':
