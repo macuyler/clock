@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from src.log import Log
+from src.time import hmt
 from src.week import Week
 
 from tests import cleanup, setup
@@ -60,6 +61,25 @@ class TestLog(unittest.TestCase):
         result = Log(Path(log_path)).weeks
         expected = [Week(1, week1), Week(2, week2), Week(3, week3)]
         msg = 'Logs should be parsed and organized into weeks.'
+        self.assertEqual(result, expected, msg)
+
+        cleanup(log_path)
+
+
+    def test_total(self):
+        log_path = f'{Path.home()}/clock-test-total.txt'
+        log_content = """
+        04/01/22=10:15
+        04/02/22=01:00
+        04/08/22=06:15
+        04/10/22=03:05
+        """
+
+        setup((log_path, log_content))
+
+        result = Log(Path(log_path)).total
+        expected = hmt(20, 35)
+        msg = 'Log should calculate a grand total.'
         self.assertEqual(result, expected, msg)
 
         cleanup(log_path)

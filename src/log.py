@@ -15,6 +15,8 @@ Grand Total = 00:00
 """
 
 import datetime
+from functools import reduce
+from operator import add
 from pathlib import Path
 
 from src.day import Day, str_to_day
@@ -27,8 +29,13 @@ class Log:
     def __init__(self, path:Path):
         self.path = path
         self.weeks = []
-        self.total = 0.0
         self._load()
+
+
+    @property
+    def total(self):
+        return reduce(add, map(lambda x: x.total, self.weeks))
+
 
     def _load(self):
         """Load and process existing log data."""
