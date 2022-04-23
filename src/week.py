@@ -17,8 +17,6 @@ class Week:
 
     @property
     def total(self):
-        """Calculate the total amount of time logged."""
-
         return reduce(add, map(lambda x: x.time, self.days))
 
 
