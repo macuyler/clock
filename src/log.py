@@ -60,8 +60,7 @@ class Log:
 
 
     def __str__(self):
-        # TODO: Add Grand Total Line...
-        return '\n'.join(map(str, self.weeks))
+        return '\n'.join(map(str, self.weeks)) + f'\n\nGrand Total = {self.total}'
 
 
 def rectify(days:list[Day]) -> list[Day]:
