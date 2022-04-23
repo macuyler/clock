@@ -2,6 +2,7 @@
 
 import unittest
 
+from src.time import hmt
 from src.week import Week
 
 
@@ -20,8 +21,12 @@ class TestWeek(unittest.TestCase):
                 '04/30/22=08:32']
 
         result = Week(week_num, days).total
-        expected = 31.4
+        expected = hmt(31, 24)
         self.assertEqual(result, expected, msg)
+
+        result = Week(week_num, days)
+        expected = '\n'.join([f'- Week {week_num}:', *days, '-- Total=31:24'])
+        self.assertEqual(str(result), expected, msg)
 
         days = ['05/01/22=90:30',
                 '05/02/22=95:30',
@@ -29,7 +34,7 @@ class TestWeek(unittest.TestCase):
                 '05/04/22=95:30']
 
         result = Week(week_num, days).total
-        expected = 377.0
+        expected = hmt(377, 0)
         self.assertEqual(result, expected, msg)
 
 

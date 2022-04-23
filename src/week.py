@@ -1,24 +1,27 @@
 """A week's worth of log lines."""
 
-from src.day import day, format_time
+from functools import reduce
+from operator import add
+
+from src.day import str_to_day
 
 
 class Week:
 
     def __init__(self, week_num:int, days:list[str]):
         self.week_num = week_num
-        self.days = list(map(day, days))
+        self.days = list(map(str_to_day, days))
 
 
     @property
     def total(self):
-        """Calculate the total number of hours logged."""
+        """Calculate the total amount of time logged."""
 
-        return sum(map(lambda x: x.time, self.days))
+        return reduce(add, map(lambda x: x.time, self.days))
 
 
     def __str__(self):
         header = f'- Week {self.week_num}:'
         days = list(map(str, self.days))
-        footer = f'-- Total={format_time(self.total)}'
+        footer = f'-- Total={self.total}'
         return '\n'.join([header, *days, footer])
