@@ -49,14 +49,11 @@ class Log:
         days = rectify(days)
 
         week_length = 7
-        week_days = [days[i:i+week_length] for i in range(0, len(days), week_length)]
+        raw_weeks = [days[i:i+week_length] for i in range(0, len(days), week_length)]
         # Ref: https://www.geeksforgeeks.org/break-list-chunks-size-n-python/
 
-        for i, week in enumerate(week_days):
-            # Convert days back to string?
-            week = list(map(str, week))
-
-            self.weeks.append(Week(i + 1, week))
+        for i, week_days in enumerate(raw_weeks):
+            self.weeks.append(Week(i + 1, week_days))
 
 
     def __str__(self):
