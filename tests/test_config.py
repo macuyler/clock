@@ -1,11 +1,12 @@
 """Unit tests covering the src.config module."""
 
 import os
-import random
 import unittest
 from pathlib import Path
 
 from src.config import Config
+
+from tests import cleanup, digits, setup
 
 
 class TestConfig(unittest.TestCase):
@@ -67,28 +68,6 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(conf.profile(''), None, msg)
 
         cleanup(conf_path, log_path1, log_path2)
-
-
-def setup(*files:(str, str)):
-    """Setup test files."""
-
-    for path, content in files:
-        with open(path, 'w', encoding='utf-8') as file:
-            file.write(content or '')
-
-
-def cleanup(*files:str):
-    """Remove test files."""
-
-    for path in files:
-        if os.path.exists(path):
-            os.remove(path)
-
-
-def digits():
-    """Generate a random 4 digit number."""
-
-    return str(random.randint(1111, 9999))
 
 
 if __name__ == '__main__':
