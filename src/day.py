@@ -24,6 +24,10 @@ class Day:
         return f'{self.date.strftime(DATE_FORMAT)}={self.time}'
 
 
+    def __lt__(self, other):
+        return self.date < other.date
+
+
 def str_to_day(string:str) -> Optional[Day]:
     """Attempt to convert a string into a Day object."""
 
