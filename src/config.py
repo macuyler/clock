@@ -18,7 +18,7 @@ CONFIG_PATH = f'{Path.home()}/.config/clock/clock.conf'
 
 class Config:
 
-    def __init__(self, conf_path: str=CONFIG_PATH):
+    def __init__(self, conf_path: str = CONFIG_PATH):
         self.path = Path(conf_path)
         self.profiles = {}
         self._touch()
@@ -26,7 +26,7 @@ class Config:
         self._validate()
 
 
-    def profile(self, name:str) -> Optional[Path]:
+    def profile(self, name: str) -> Optional[Path]:
         """Get the path for a given profile name."""
 
         path = None

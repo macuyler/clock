@@ -20,20 +20,20 @@ from operator import add
 from pathlib import Path
 
 from src.day import Day, str_to_day
-from src.time import hmt
+from src.time import Time, hmt
 from src.week import Week
 
 
 class Log:
 
-    def __init__(self, path:Path):
+    def __init__(self, path: Path):
         self.path = path
         self.weeks = []
         self._load()
 
 
     @property
-    def total(self):
+    def total(self) -> Time:
         return reduce(add, map(lambda x: x.total, self.weeks))
 
 
@@ -60,7 +60,7 @@ class Log:
         return '\n'.join(map(str, self.weeks)) + f'\n\nGrand Total = {self.total}'
 
 
-def rectify(days:list[Day]) -> list[Day]:
+def rectify(days: list[Day]) -> list[Day]:
     """Combine duplicates and fill in missing days."""
 
     carrier = hmt(0, 0)
@@ -86,7 +86,7 @@ def rectify(days:list[Day]) -> list[Day]:
     return new_days
 
 
-def missing(start:Day, end:Day) -> list[Day]:
+def missing(start: Day, end: Day) -> list[Day]:
     """Create a list of all days between the given dates."""
 
     one_day = datetime.timedelta(days=1)

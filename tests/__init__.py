@@ -4,7 +4,7 @@ import os
 import random
 
 
-def setup(*files:(str, str)):
+def setup(*files: (str, str)):
     """Setup test files."""
 
     for path, content in files:
@@ -12,7 +12,7 @@ def setup(*files:(str, str)):
             file.write(content or '')
 
 
-def cleanup(*files:str):
+def cleanup(*files: str):
     """Remove test files."""
 
     for path in files:
@@ -20,7 +20,7 @@ def cleanup(*files:str):
             os.remove(path)
 
 
-def digits():
+def digits() -> str:
     """Generate a random 4 digit number."""
 
     return str(random.randint(1111, 9999))

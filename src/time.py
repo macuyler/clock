@@ -6,17 +6,17 @@ from typing import Optional
 
 class Time:
 
-    def __init__(self, value:int):
+    def __init__(self, value: int):
         self.value = value
 
 
     @property
-    def hours(self):
+    def hours(self) -> int:
         return int(self.value/60)
 
 
     @property
-    def minutes(self):
+    def minutes(self) -> int:
         return self.value % 60
 
 
@@ -33,13 +33,13 @@ class Time:
         return self.value == other.value
 
 
-def hmt(hours:int, minutes:int) -> Time:
+def hmt(hours: int, minutes: int) -> Time:
     """Create a Time object from a number of hours and minutes."""
 
     return Time(hours * 60 + minutes)
 
 
-def str_to_time(string:str) -> Optional[Time]:
+def str_to_time(string: str) -> Optional[Time]:
     """Attempt to convert a string into a Time object."""
 
     out = None
