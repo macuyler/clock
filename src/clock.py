@@ -5,6 +5,7 @@ from typing import Optional
 
 from src.config import Config
 from src.day import Day
+from src.log import Log
 from src.time import delta_to_time
 
 
@@ -45,4 +46,10 @@ class Clock:
             time = delta_to_time(self.stop_time - self.start_time)
             clocked = Day(date, time)
 
-            print(clocked)
+            log_path = self.config.profile(self.profile)
+            if log_path:
+                log = Log(log_path)
+                log.lines.append(str(clocked))
+                log.save()
+            else:
+                print(clocked)
