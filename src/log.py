@@ -44,7 +44,7 @@ class Log:
         """Save current log data."""
 
         with self.path.open('w', encoding='utf-8') as log_file:
-            log_file.write(LogData(self.lines))
+            log_file.write(str(LogData(self.lines)))
 
 
 class LogData:
