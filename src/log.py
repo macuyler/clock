@@ -25,11 +25,37 @@ from src.week import Week
 
 
 class Log:
+    """A log file handler."""
 
     def __init__(self, path: Path):
         self.path = path
-        self.weeks = []
+        self.lines = []
         self._load()
+
+
+    def _load(self):
+        """Load existing log data."""
+
+        with self.path.open('r', encoding='utf-8') as log_file:
+            self.lines = log_file.readlines()
+
+
+    def save(self):
+        """Save current log data."""
+
+        with self.path.open('w', encoding='utf-8') as log_file:
+            log_file.write(LogData(self.lines))
+
+
+class LogData:
+    """Immutable log data represented as a list of Weeks."""
+
+    def __init__(self, lines: list[str]):
+        self._weeks = parse_log(lines)
+
+    @property
+    def weeks(self) -> list[Week]:
+        return self._weeks
 
 
     @property
@@ -37,30 +63,31 @@ class Log:
         return reduce(add, map(lambda x: x.total, self.weeks))
 
 
-    def _load(self):
-        """Load and process existing log data."""
-
-        with self.path.open('r', encoding='utf-8') as log_file:
-            lines = log_file.readlines()
-
-        is_day = lambda x: not x is None
-        days = list(filter(is_day, map(str_to_day, lines)))
-        days.sort()
-        days = rectify(days)
-
-        week_length = 7
-        raw_weeks = [days[i:i+week_length] for i in range(0, len(days), week_length)]
-        # Ref: https://www.geeksforgeeks.org/break-list-chunks-size-n-python/
-
-        for i, week_days in enumerate(raw_weeks):
-            self.weeks.append(Week(i + 1, week_days))
-
-
     def __str__(self):
         return '\n'.join(map(str, self.weeks)) + f'\n\nGrand Total = {self.total}'
 
 
-def rectify(days: list[Day]) -> list[Day]:
+def parse_log(lines: list[str]) -> list[Week]:
+    """Parse lines from a log to generate a list of Weeks."""
+
+    weeks = []
+
+    is_day = lambda x: not x is None
+    days = list(filter(is_day, map(str_to_day, lines)))
+    days.sort()
+    days = _rectify(days)
+
+    week_length = 7
+    raw_weeks = [days[i:i+week_length] for i in range(0, len(days), week_length)]
+    # Ref: https://www.geeksforgeeks.org/break-list-chunks-size-n-python/
+
+    for i, week_days in enumerate(raw_weeks):
+        weeks.append(Week(i + 1, week_days))
+
+    return weeks
+
+
+def _rectify(days: list[Day]) -> list[Day]:
     """Combine duplicates and fill in missing days."""
 
     carrier = hmt(0, 0)
@@ -77,7 +104,7 @@ def rectify(days: list[Day]) -> list[Day]:
                 continue
 
             new_days.append(current)
-            new_days += missing(day, next_day)
+            new_days += _missing(day, next_day)
             carrier = hmt(0, 0)
 
         else:
@@ -86,7 +113,7 @@ def rectify(days: list[Day]) -> list[Day]:
     return new_days
 
 
-def missing(start: Day, end: Day) -> list[Day]:
+def _missing(start: Day, end: Day) -> list[Day]:
     """Create a list of all days between the given dates."""
 
     one_day = datetime.timedelta(days=1)
