@@ -1,5 +1,6 @@
 """A representaion of time as a number of minutes."""
 
+import datetime
 import re
 from typing import Optional
 
@@ -50,3 +51,11 @@ def str_to_time(string: str) -> Optional[Time]:
         out = hmt(int(hours), int(mins))
 
     return out
+
+
+def delta_to_time(delta: datetime.timedelta) -> Time:
+    """Convert a timedelta into a Time object."""
+
+    seconds = delta.total_seconds()
+    minutes = round(seconds / 60)
+    return Time(minutes)
