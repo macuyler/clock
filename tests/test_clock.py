@@ -11,6 +11,7 @@ class TestClock(unittest.TestCase):
 
         clock = Clock()
         clock.run()
+        clock.save()
 
         self.assertEqual(0, 0)
 
