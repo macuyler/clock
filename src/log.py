@@ -47,6 +47,12 @@ class Log:
             log_file.write(str(LogData(self.lines)))
 
 
+    def add(self, day: Day):
+        """Add a day to the log data."""
+
+        self.lines.append(str(day))
+
+
 class LogData:
     """Immutable log data represented as a list of Weeks."""
 

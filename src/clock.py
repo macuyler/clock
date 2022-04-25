@@ -49,7 +49,8 @@ class Clock:
             log_path = self.config.profile(self.profile)
             if log_path:
                 log = Log(log_path)
-                log.lines.append(str(clocked))
+                log.add(clocked)
                 log.save()
+
             else:
                 print(clocked)
