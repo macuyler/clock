@@ -20,6 +20,7 @@ from operator import add
 from pathlib import Path
 
 from src.day import Day, str_to_day
+from src.file import File
 from src.time import Time, hmt
 from src.week import Week
 
@@ -28,7 +29,7 @@ class Log:
     """A log file handler."""
 
     def __init__(self, path: Path):
-        self.path = path
+        self.file = File(path)
         self.lines = []
         self._load()
 
@@ -36,15 +37,16 @@ class Log:
     def _load(self):
         """Load existing log data."""
 
-        with self.path.open('r', encoding='utf-8') as log_file:
-            self.lines = log_file.readlines()
+        data, error = self.file.read()
+        if error is None:
+            self.lines = data.split('\n')
 
 
     def save(self):
         """Save current log data."""
 
-        with self.path.open('w', encoding='utf-8') as log_file:
-            log_file.write(str(LogData(self.lines)))
+        data = str(LogData(self.lines))
+        self.file.write(data)
 
 
     def add(self, day: Day):
@@ -58,6 +60,7 @@ class LogData:
 
     def __init__(self, lines: list[str]):
         self._weeks = parse_log(lines)
+
 
     @property
     def weeks(self) -> list[Week]:
