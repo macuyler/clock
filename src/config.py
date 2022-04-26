@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 from typing import Optional
 
+from src.file import File
+
 CONFIG_PATH = f'{Path.home()}/.config/clock/clock.conf'
 
 class Config:
@@ -51,13 +53,12 @@ class Config:
 
         delim = ':'
 
-        with self.path.open('r', encoding='utf-8') as conf_file:
-            lines = conf_file.readlines()
-
-        for line in lines:
-            if delim in line:
-                name, path = line.split(delim)
-                self.profiles[name] = path.strip()
+        data, error = File(self.path).read()
+        if error is None:
+            for line in data.split('\n'):
+                if delim in line:
+                    name, path = line.split(delim)
+                    self.profiles[name] = path.strip()
 
 
     def _validate(self):
