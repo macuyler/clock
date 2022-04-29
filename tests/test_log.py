@@ -1,13 +1,50 @@
-"""Unit tests covering the src.log, src.log_data, and src.log_tools module."""
+"""Unit tests covering the src.log module."""
 
+import datetime
 import unittest
+from pathlib import Path
 
-from src.log import LogData, parse_log
+from src.day import Day
+from src.log import Log, LogData, parse_log
 from src.time import hmt
 from src.week import Week
 
+from tests import cleanup, setup
+
 
 class TestLog(unittest.TestCase):
+
+    def test_log_update(self):
+        log_path = f'{Path.home()}/test-clock-log-update.txt'
+        log_content = """
+        01/01/01=01:01
+        01/03/01=00:05
+        """
+
+
+        setup((log_path, log_content))
+
+        new_day = Day(datetime.date(2001, 1, 3), hmt(1, 5))
+        log = Log(Path(log_path))
+        log.add(new_day)
+        log.save()
+
+        with open(log_path, 'r', encoding='utf-8') as log_file:
+            result = log_file.read()
+
+        expected = '\n'.join(["- Week 1:",
+                              "01/01/01=01:01",
+                              "01/02/01=00:00",
+                              "01/03/01=01:10",
+                              "-- Total=02:11",
+                              "",
+                              "Grand Total = 02:11"])
+
+        msg = "Log file should be properly updated and formatted on save."
+        self.assertEqual(result, expected, msg)
+
+        cleanup(log_path)
+
 
     def test_parse_log(self):
         log_content = ['01/08/01=01:00',
