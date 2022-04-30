@@ -18,6 +18,7 @@ import datetime
 from functools import reduce
 from operator import add
 from pathlib import Path
+from typing import Optional
 
 from src.day import Day, str_to_day
 from src.file import File
@@ -42,11 +43,11 @@ class Log:
             self.lines = data.split('\n')
 
 
-    def save(self):
+    def save(self) -> Optional[Exception]:
         """Save current log data."""
 
         data = str(LogData(self.lines))
-        self.file.write(data)
+        return self.file.write(data)
 
 
     def add(self, day: Day):

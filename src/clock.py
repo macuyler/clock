@@ -56,8 +56,12 @@ class Clock:
             if log_path:
                 log = Log(log_path)
                 log.add(clocked)
-                log.save()
-                Interface.saved()
+                error = log.save()
+
+                if error:
+                    Interface.handle(error, clocked)
+                else:
+                    Interface.saved()
 
             else:
                 Interface.save(clocked)

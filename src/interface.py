@@ -2,6 +2,7 @@
 
 import sys
 from datetime import timedelta
+from typing import Optional
 
 from src.day import Day
 from src.time import delta_to_time
@@ -69,3 +70,22 @@ class Interface:
                   '[*] Saved data to log file.']
 
         print('\n'.join(prompt))
+
+
+    @staticmethod
+    def handle(error: Exception, day: Optional[Day] = None):
+        """Gracefully handle a file read/write error."""
+
+        prompt = ['',
+                  '[!] Failed to save data to log.']
+
+        if error is PermissionError:
+            prompt.append('[!] Clock does not have permission to access the log file.')
+        elif error is FileNotFoundError:
+            prompt.append('[!] The log file does not exist.')
+
+        prompt.append('')
+        print('\n'.join(prompt), file=sys.stderr)
+
+        if day:
+            print(day)
