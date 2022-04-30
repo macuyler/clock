@@ -1,7 +1,9 @@
 """A generic read and write file handler."""
 
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Optional
+
+from src.error import Error, zip_error
 
 
 class File:
@@ -11,13 +13,13 @@ class File:
         self.encoding = encoding
 
 
-    def read(self) -> (Optional[str], Optional[Exception]):
+    def read(self) -> (Optional[str], Optional[Error]):
         """Attempt to read the content of the file and handle exceptions."""
 
         return zip_error(self._raw_read)
 
 
-    def write(self, content: str) -> Optional[Exception]:
+    def write(self, content: str) -> Optional[Error]:
         """Attempt to write new content to the file and handle exceptions."""
 
         _, error = zip_error(self._raw_write, content)
@@ -36,21 +38,3 @@ class File:
 
         with self.path.open('w', encoding=self.encoding) as file:
             file.write(content)
-
-
-def zip_error(callback: Callable, *args) -> (Optional[str], Optional[Exception]):
-    """Zip the output of a callback and an exception if one is raised."""
-
-    output = None
-    error = None
-
-    try:
-        output = callback(*args)
-
-    except PermissionError:
-        error = PermissionError
-
-    except FileNotFoundError:
-        error = FileNotFoundError
-
-    return (output, error)

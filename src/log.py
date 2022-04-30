@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import Optional
 
 from src.day import Day, str_to_day
+from src.error import Error
 from src.file import File
 from src.time import Time, hmt
 from src.week import Week
@@ -43,7 +44,7 @@ class Log:
             self.lines = data.split('\n')
 
 
-    def save(self) -> Optional[Exception]:
+    def save(self) -> Optional[Error]:
         """Save current log data."""
 
         data = str(LogData(self.lines))

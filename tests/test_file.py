@@ -5,6 +5,7 @@ import stat
 import unittest
 from pathlib import Path
 
+from src.error import Error
 from src.file import File
 
 from tests import cleanup, setup
@@ -57,6 +58,7 @@ class TestFile(unittest.TestCase):
         result, error = File(Path(file_path)).read()
         expected_result = None
         expected_error = FileNotFoundError
+        expected_error = Error.NOT_FOUND
         result_msg = 'Result should be None after read error.'
         error_msg = 'Error should be FileNotFoundError when the file is missing.'
         self.assertEqual(result, expected_result, result_msg)
@@ -74,6 +76,7 @@ class TestFile(unittest.TestCase):
 
         result = File(Path(file_path)).write(new_content)
         expected = PermissionError
+        expected = Error.PERMISSION
         msg = 'PermissionError should be returned when writing to a protected file.'
         self.assertEqual(result, expected, msg)
 
