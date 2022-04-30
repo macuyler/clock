@@ -53,6 +53,7 @@ class Clock:
             time = delta_to_time(self.stop_time - self.start_time)
             clocked = Day(date, time)
 
+            error = None
             log_path = self.config.profile(self.profile)
             if log_path:
                 log = Log(log_path)
