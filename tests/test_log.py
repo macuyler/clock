@@ -21,7 +21,6 @@ class TestLog(unittest.TestCase):
         01/03/01=00:05
         """
 
-
         setup((log_path, log_content))
 
         new_day = Day(datetime.date(2001, 1, 3), hmt(1, 5))

@@ -5,6 +5,7 @@ from typing import Optional
 
 from src.config import Config
 from src.day import Day
+from src.interface import Interface
 from src.log import Log
 from src.time import delta_to_time
 
@@ -32,8 +33,13 @@ class Clock:
         self.start()
 
         value = ''
-        while value != 'q':
-            value = input('> ')
+        while value != 'q' and self.start_time:
+            Interface.help()
+
+            if value == 't':
+                Interface.show(datetime.now() - self.start_time)
+
+            value = Interface.input()
 
         self.stop()
 
@@ -51,6 +57,10 @@ class Clock:
                 log = Log(log_path)
                 log.add(clocked)
                 log.save()
+                Interface.saved()
 
             else:
-                print(clocked)
+                Interface.save(clocked)
+
+        self.start_time = None
+        self.stop_time = None
