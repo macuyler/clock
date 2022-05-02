@@ -71,3 +71,17 @@ class Config:
 
         for name in invalid:
             del self.profiles[name]
+
+
+    def legacy(self) -> Optional[Path]:
+        """Attempt to parse a legacy (<= v1.1.0) config file."""
+
+        legacy_path = None
+        data, error = File(self.path).read()
+
+        if error is None:
+            path = Path(data.strip())
+            if path.exists() and path.is_file():
+                legacy_path = path
+
+        return legacy_path

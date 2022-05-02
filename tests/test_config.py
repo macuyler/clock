@@ -70,5 +70,33 @@ class TestConfig(unittest.TestCase):
         cleanup(conf_path, log_path1, log_path2)
 
 
+    def test_legacy(self):
+        conf_path = f'{Path.home()}/test-legacy-config.txt'
+        log_path = f'{Path.home()}/test-legacy-config-log.txt'
+        bad_path = f'{Path.home()}/file-that-doesnt-exist.txt'
+
+        setup((conf_path, log_path),
+              (log_path, ''))
+
+        conf = Config(conf_path)
+
+        result = conf.profiles
+        expected = {}
+        msg = 'Legacy config files should not have any profiles.'
+        self.assertEqual(result, expected, msg)
+
+        result = conf.legacy()
+        expected = Path(log_path)
+        msg = 'Legacy should return a valid path from the config file.'
+        self.assertEqual(result, expected, msg)
+
+        result = Config(bad_path).legacy()
+        expected = None
+        msg = 'Legacy should return None for invalid legacy config files.'
+        self.assertEqual(result, expected, msg)
+
+        cleanup(conf_path, log_path, bad_path)
+
+
 if __name__ == '__main__':
     unittest.main()
