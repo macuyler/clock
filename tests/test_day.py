@@ -4,7 +4,7 @@ import datetime
 import unittest
 
 from src.day import Day, str_to_day
-from src.time import Time, hmt
+from src.time import hmt
 
 
 class TestDay(unittest.TestCase):
@@ -32,6 +32,18 @@ class TestDay(unittest.TestCase):
         expected = None
         msg = 'None should be returned when parsing invalid strings.'
         self.assertEqual(result, expected, msg)
+
+    def test_legacy_string_to_day(self):
+        result = str_to_day('01/01/01: 10:10HR')
+        expected = Day(datetime.date(2001, 1, 1), hmt(10, 10))
+        msg = 'Legacy strings should be parsed to create a Day object.'
+        self.assertEqual(result.date, expected.date, msg)
+        self.assertEqual(result.time, expected.time, msg)
+
+        result = str_to_day('01/02/01: 1:00HR')
+        expected = Day(datetime.date(2001, 1, 2), hmt(1, 0))
+        msg = 'Legacy strings should allow single digit hours.'
+        self.assertEqual(result.time, expected.time, msg)
 
 
 if __name__ == '__main__':

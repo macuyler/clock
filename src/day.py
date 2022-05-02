@@ -12,6 +12,7 @@ from src.time import Time, str_to_time
 
 DATE_FORMAT = "%m/%d/%y"
 LOG_FORMAT = re.compile(r'\d\d/\d\d/\d\d=\d\d:\d\d')
+LEGACY_FORMAT = re.compile(r'\d\d/\d\d/\d\d: \d\d:\d\dHR')
 
 class Day:
 
@@ -36,12 +37,19 @@ def str_to_day(string: str) -> Optional[Day]:
     """Attempt to convert a string into a Day object."""
 
     out = None
+    date_str = None
+    time_str = None
     string = string.strip()
 
     if LOG_FORMAT.match(string):
         date_str, time_str = string.split('=')
-        date = datetime.datetime.strptime(date_str, DATE_FORMAT).date()
-        time = str_to_time(time_str)
-        out = Day(date, time)
+    elif LEGACY_FORMAT.match(string):
+        date_str, time_str = string.split(': ')
+        time_str = time_str.replace('HR', '')
+
+    str_to_date = lambda x: datetime.datetime.strptime(x, DATE_FORMAT).date()
+
+    if date_str and time_str:
+        out = Day(str_to_date(date_str), str_to_time(time_str))
 
     return out
