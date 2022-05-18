@@ -2,16 +2,10 @@
 
 import unittest
 
-from src.clock import Clock
-
 
 class TestClock(unittest.TestCase):
 
     def test_stuff(self):
-
-        clock = Clock()
-        clock.run()
-        clock.save()
 
         self.assertEqual(0, 0)
 
