@@ -3,21 +3,10 @@
 import unittest
 from datetime import timedelta
 
-from src.time import delta_to_time, hmt, str_to_time
+from src.time import delta_to_time, hmt
 
 
 class TestTime(unittest.TestCase):
-
-    def test_string_to_time(self):
-        result = str_to_time('10:10')
-        expected = hmt(10, 10)
-        msg = 'Time should be parsed from a string.'
-        self.assertEqual(result, expected, msg)
-
-        result = str_to_time('1:30')
-        expected = None
-        msg = 'None should be returned if the string has a bad format.'
-        self.assertEqual(result, expected, msg)
 
 
     def test_time_to_string(self):

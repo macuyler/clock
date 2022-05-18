@@ -1,8 +1,6 @@
 """A representaion of time as a number of minutes."""
 
 import datetime
-import re
-from typing import Optional
 
 
 class Time:
@@ -38,19 +36,6 @@ def hmt(hours: int, minutes: int) -> Time:
     """Create a Time object from a number of hours and minutes."""
 
     return Time(hours * 60 + minutes)
-
-
-def str_to_time(string: str) -> Optional[Time]:
-    """Attempt to convert a string into a Time object."""
-
-    out = None
-    time_format = re.compile(r'\d\d:\d\d')
-
-    if time_format.match(string):
-        hours, mins = string.split(':')
-        out = hmt(int(hours), int(mins))
-
-    return out
 
 
 def delta_to_time(delta: datetime.timedelta) -> Time:

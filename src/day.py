@@ -5,14 +5,13 @@
 """
 
 import datetime
-import re
 from typing import Optional
 
-from src.time import Time, str_to_time
+from src.parse import get_pattern, parse
+from src.time import Time, hmt
 
 DATE_FORMAT = "%m/%d/%y"
-LOG_FORMAT = re.compile(r'\d\d/\d\d/\d\d=\d\d:\d\d')
-LEGACY_FORMAT = re.compile(r'\d\d/\d\d/\d\d: \d\d:\d\dHR')
+
 
 class Day:
 
@@ -37,19 +36,19 @@ def str_to_day(string: str) -> Optional[Day]:
     """Attempt to convert a string into a Day object."""
 
     out = None
-    date_str = None
-    time_str = None
-    string = string.strip()
 
-    if LOG_FORMAT.match(string):
-        date_str, time_str = string.split('=')
-    elif LEGACY_FORMAT.match(string):
-        date_str, time_str = string.split(': ')
-        time_str = time_str.replace('HR', '')
+    day_format = get_pattern("%M/%D/%Y=%h:%m")
+    legacy_day_format = get_pattern("%M/%D/%Y: %h:%mHR")
 
-    str_to_date = lambda x: datetime.datetime.strptime(x, DATE_FORMAT).date()
+    values = parse(day_format, string)
+    legacy_values = parse(legacy_day_format, string)
 
-    if date_str and time_str:
-        out = Day(str_to_date(date_str), str_to_time(time_str))
+    if None not in values:
+        month, day, year, hours, mins = values
+        out = Day(datetime.date(2000 + year, month, day), hmt(hours, mins))
+
+    elif None not in legacy_values:
+        month, day, year, hours, mins = legacy_values
+        out = Day(datetime.date(2000 + year, month, day), hmt(hours, mins))
 
     return out

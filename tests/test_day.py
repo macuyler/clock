@@ -33,6 +33,7 @@ class TestDay(unittest.TestCase):
         msg = 'None should be returned when parsing invalid strings.'
         self.assertEqual(result, expected, msg)
 
+
     def test_legacy_string_to_day(self):
         result = str_to_day('01/01/01: 10:10HR')
         expected = Day(datetime.date(2001, 1, 1), hmt(10, 10))
