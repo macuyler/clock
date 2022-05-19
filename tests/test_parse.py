@@ -50,7 +50,7 @@ class TestParse(unittest.TestCase):
         fmt = '%M/%D/%Y=%h:%m'
         val = '01/01/01=01:01'
 
-        month, day, year, hours, mins = parse(get_pattern(fmt), val)
+        month, day, year, hours, mins = parse(fmt, val)
         msg = 'Parse should return values according to a pattern.'
 
         self.assertEqual(month, 1, msg)
@@ -64,7 +64,7 @@ class TestParse(unittest.TestCase):
         fmt = '%M/%D/%Y'
         val = 'JAN/0/2001'
 
-        month, day, year = parse(get_pattern(fmt), val)
+        month, day, year = parse(fmt, val)
         msg = 'None should be returned for invalid values.'
 
         self.assertEqual(month, None, msg)
@@ -76,7 +76,7 @@ class TestParse(unittest.TestCase):
         fmt = '%M/%D/%Y'
         val = '01|01|01'
 
-        month, day, year = parse(get_pattern(fmt), val)
+        month, day, year = parse(fmt, val)
         msg = 'None should be returned when value uses invalid formatting.'
 
         self.assertEqual(month, None, msg)
@@ -88,7 +88,7 @@ class TestParse(unittest.TestCase):
         fmt = 'Prefix: %M/%D/%Y'
         val = 'Prefix: 01/01/01'
 
-        month, day, year = parse(get_pattern(fmt), val)
+        month, day, year = parse(fmt, val)
         msg = 'Parse should only handle data after the prefix.'
 
         self.assertEqual(month, 1, msg)
@@ -100,7 +100,7 @@ class TestParse(unittest.TestCase):
         fmt = '%M/%D/%Y, suffix.'
         val = '01/01/01, suffix.'
 
-        month, day, year = parse(get_pattern(fmt), val)
+        month, day, year = parse(fmt, val)
         msg = 'Parse should only handle data behind the suffix.'
 
         self.assertEqual(month, 1, msg)

@@ -7,7 +7,7 @@
 import datetime
 from typing import Optional
 
-from src.parse import get_pattern, parse
+from src.parse import parse
 from src.time import Time, hmt
 
 DATE_FORMAT = "%m/%d/%y"
@@ -37,8 +37,8 @@ def str_to_day(string: str) -> Optional[Day]:
 
     out = None
 
-    day_format = get_pattern("%M/%D/%Y=%h:%m")
-    legacy_day_format = get_pattern("%M/%D/%Y: %h:%mHR")
+    day_format = "%M/%D/%Y=%h:%m"
+    legacy_day_format = "%M/%D/%Y: %h:%mHR"
 
     values = parse(day_format, string)
     legacy_values = parse(legacy_day_format, string)

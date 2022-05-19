@@ -71,10 +71,10 @@ def handle_affixes(pattern: Pattern, string: str) -> (Pattern, str):
     return pattern, string
 
 
-def parse(pattern: Pattern, string: str) -> list[Optional[int]]:
+def parse(fmt: str, string: str) -> list[Optional[int]]:
     """Parse a set of integers from the given value according to a pattern."""
 
-    pattern, string = handle_affixes(pattern, string)
+    pattern, string = handle_affixes(get_pattern(fmt), string)
     output = ParsedValues()
     string = deque(string)
     handle = None
