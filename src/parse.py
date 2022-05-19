@@ -38,9 +38,6 @@ def int_parser(minimum: Optional[int] = None, maximum: Optional[int] = None) -> 
 def get_pattern(fmt: str) -> Pattern:
     """Generate a pattern from the given format string."""
 
-    fmt = deque(fmt)
-    output = []
-
     flags = {
         'Y': int_parser(minimum=0, maximum=99),
         'M': int_parser(minimum=1, maximum=12),
@@ -49,18 +46,18 @@ def get_pattern(fmt: str) -> Pattern:
         'm': int_parser(minimum=0, maximum=59),
     }
 
-    flag = False
+    output = []
+    flagged = False
     delim = ''
 
-    while len(fmt) > 0:
-        char = fmt.popleft()
+    for char in fmt:
 
-        if flag and char in flags:
+        if flagged and char in flags:
             output.append(flags[char])
             continue
 
         if char == '%':
-            flag = True
+            flagged = True
 
             if delim:
                 output.append(delim)
