@@ -1,5 +1,6 @@
 """A set of string parsing utilities."""
 
+from collections import deque
 from functools import reduce
 from typing import Callable, Optional, Union
 
@@ -37,22 +38,22 @@ def int_parser(minimum: Optional[int] = None, maximum: Optional[int] = None) -> 
 def get_pattern(fmt: str) -> Pattern:
     """Generate a pattern from the given format string."""
 
-    fmt = list(fmt)
+    fmt = deque(fmt)
     output = []
 
     flags = {
-        'Y': int_parser(0, 99),
-        'M': int_parser(1, 12),
-        'D': int_parser(1, 31),
-        'h': int_parser(0),
-        'm': int_parser(0, 59),
+        'Y': int_parser(minimum=0, maximum=99),
+        'M': int_parser(minimum=1, maximum=12),
+        'D': int_parser(minimum=1, maximum=31),
+        'h': int_parser(minimum=0),
+        'm': int_parser(minimum=0, maximum=59),
     }
 
     flag = False
     delim = ''
 
     while len(fmt) > 0:
-        char = fmt.pop(0)
+        char = fmt.popleft()
 
         if flag and char in flags:
             output.append(flags[char])
@@ -88,7 +89,7 @@ def parse(pattern: Pattern, string: str) -> list[Optional[int]]:
         pattern = pattern[:-1]
 
     output = []
-    string = list(string)
+    string = deque(string)
 
     handle = None
     delim = None
@@ -104,7 +105,7 @@ def parse(pattern: Pattern, string: str) -> list[Optional[int]]:
 
         if delim:
             while delim_check != delim and len(string) > 0:
-                char = string.pop(0)
+                char = string.popleft()
 
                 if delim.startswith(delim_check + char):
                     delim_check += char

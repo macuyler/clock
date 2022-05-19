@@ -64,13 +64,9 @@ class Config:
     def _validate(self):
         """Remove any profile with an invalid path."""
 
-        invalid = []
-        for name, path in self.profiles.items():
+        for name, path in list(self.profiles.items()):
             if not Path(path).exists():
-                invalid.append(name)
-
-        for name in invalid:
-            del self.profiles[name]
+                del self.profiles[name]
 
 
     def legacy(self) -> Optional[Path]:
