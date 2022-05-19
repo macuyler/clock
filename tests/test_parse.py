@@ -108,6 +108,18 @@ class TestParse(unittest.TestCase):
         self.assertEqual(year, 1, msg)
 
 
+    def test_parsed_values_success(self):
+        fmt = '%M/%D/%Y'
+
+        result = parse(fmt, '02/03/04')
+        msg = 'ParsedValues.success should return True if all values were parsed.'
+        self.assertTrue(result.success, msg)
+
+        result = parse(fmt, '')
+        msg = 'ParsedValues.success should return False if any values were not parsed.'
+        self.assertFalse(result.success, msg)
+
+
 def parsers_match(parser: Callable, control: Callable, nums: range) -> bool:
     """Test that the output of a parser matches that of a control parser for a range of inputs."""
 

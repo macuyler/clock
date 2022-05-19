@@ -16,6 +16,15 @@ class ParsedValues:
         self.values = []
 
 
+    def __iter__(self):
+        return iter(self.values)
+
+
+    @property
+    def success(self):
+        return None not in self.values
+
+
     def append(self, value: Optional[int]):
         self.values.append(value)
 
@@ -71,7 +80,7 @@ def handle_affixes(pattern: Pattern, string: str) -> (Pattern, str):
     return pattern, string
 
 
-def parse(fmt: str, string: str) -> list[Optional[int]]:
+def parse(fmt: str, string: str) -> ParsedValues:
     """Parse a set of integers from the given value according to a pattern."""
 
     pattern, string = handle_affixes(get_pattern(fmt), string)
@@ -94,7 +103,7 @@ def parse(fmt: str, string: str) -> list[Optional[int]]:
 
     output.fill_empty(pattern)
 
-    return output.values
+    return output
 
 
 def compose(*func: Callable) -> Callable:

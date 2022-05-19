@@ -43,11 +43,11 @@ def str_to_day(string: str) -> Optional[Day]:
     values = parse(day_format, string)
     legacy_values = parse(legacy_day_format, string)
 
-    if None not in values:
+    if values.success:
         month, day, year, hours, mins = values
         out = Day(datetime.date(2000 + year, month, day), hmt(hours, mins))
 
-    elif None not in legacy_values:
+    elif legacy_values.success:
         month, day, year, hours, mins = legacy_values
         out = Day(datetime.date(2000 + year, month, day), hmt(hours, mins))
 
