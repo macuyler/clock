@@ -69,7 +69,8 @@ _notify_me:60.0
 ## Usage
 
 Running the clock script will start an infinite loop that prompts you for input.
-The idea is that you can run the script and then minimize the window or something.
+
+> The idea is that you can run the script and then minimize the window or something.
 
 ```
 $ clock [-h] [-n NOTIFY_ME] [profile]
@@ -83,7 +84,7 @@ $ clock [-h] [-n NOTIFY_ME] [profile]
 ```
 
 You have to option to pass in the name of a profile that you want to use.
-If you don't specify a profile, it will attempt to find a profile named **default**.
+> If you don't specify a profile, it will attempt to find a profile named **default**.
 
 ```
 clock school
@@ -91,7 +92,7 @@ clock school
 
 Incase of an invalid config file or profile,
 clock will print the number of hours you just clocked to _stdout_.
-All other clock output including _UI_ elements are printed over _stderr_.
+All other clock output including UI elements are printed over _stderr_.
 This will allow you to redirect _stdout_ to a log file if needed.
 
 ```
