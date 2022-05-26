@@ -120,6 +120,18 @@ class TestParse(unittest.TestCase):
         self.assertFalse(result.success, msg)
 
 
+    def test_single_value_fmt(self):
+        msg = 'Parse should handle single value formats.'
+
+        result, = parse('%Y', '01')
+        expected = 1
+        self.assertEqual(result, expected, msg)
+
+        result, = parse('/%Y/', '/01/')
+        expected = 1
+        self.assertEqual(result, expected, msg)
+
+
 def parsers_match(parser: Callable, control: Callable, nums: range) -> bool:
     """Test that the output of a parser matches that of a control parser for a range of inputs."""
 
