@@ -60,10 +60,17 @@ class UI:
     """An abstract user interface implementation."""
 
     @staticmethod
+    def heading():
+        """A global application heading."""
+
+        return 'You are clocked in!'
+
+
+    @staticmethod
     def help():
         """Print a helpful list of options."""
 
-        IO.list('You have clocked in...',
+        IO.list(UI.heading(),
                 ['Enter [t] to show time.',
                  'Enter [q] to quit.'])
 

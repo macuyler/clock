@@ -46,7 +46,7 @@ class Notifier:
 
         if self.start_time:
             content = UI.raw_show(datetime.now() - self.start_time)
-            notification.notify(title="You are clocked in!", message=content)
+            notification.notify(title=UI.heading(), message=content)
 
 
 # Ref: https://stackoverflow.com/questions/12435211/threading-timer-repeat-function-every-n-seconds
