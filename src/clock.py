@@ -6,14 +6,16 @@ from typing import Optional
 from src.config import Config
 from src.day import Day
 from src.log import Log
+from src.notifier import Notifier
 from src.time import delta_to_time
 from src.tools import IO, UI
 
 
 class Clock:
 
-    def __init__(self, profile: Optional[str] = None):
+    def __init__(self, profile: Optional[str] = None, notify: Optional[float] = 0.0):
         self.profile = profile
+        self.notify = notify
         self.config = Config()
         self.start_time = None
         self.stop_time = None
@@ -30,6 +32,8 @@ class Clock:
     def run(self):
         """Run the time tracker."""
 
+        notifier = Notifier(self.notify)
+        notifier.start()
         self.start()
 
         value = ''
@@ -42,6 +46,7 @@ class Clock:
             value = UI.input()
 
         self.stop()
+        notifier.stop()
         IO.log('Finished running clock.')
 
 
