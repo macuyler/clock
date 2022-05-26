@@ -65,7 +65,7 @@ class Clock:
                 log.add(clocked)
                 error = log.save()
             else:
-                error = Error.PROFILE
+                error = Error.NO_LOG_FILE
 
             UI.save(clocked, error)
 

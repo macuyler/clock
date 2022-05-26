@@ -9,7 +9,7 @@ class Error(Enum):
 
     PERMISSION = 'Need permission to access {} file.'
     NOT_FOUND = '{} file was not found.'
-    PROFILE = '{} profile is invalid.'
+    NO_LOG_FILE = '{} file path or profile name is invalid.'
 
 
 def zip_error(callback: Callable, *args) -> (Optional[str], Optional[Error]):
