@@ -14,7 +14,6 @@ from tests import cleanup, setup
 class TestFile(unittest.TestCase):
 
     def test_read_content(self):
-
         file_path = f'{Path.home()}/clock-test-read-file.txt'
         file_content = 'Hello World!'
 
@@ -32,7 +31,6 @@ class TestFile(unittest.TestCase):
 
 
     def test_write_content(self):
-
         file_path = f'{Path.home()}/clock-test-write-file.txt'
         file_content = 'Why is the sky blue?'
 
@@ -52,7 +50,6 @@ class TestFile(unittest.TestCase):
 
 
     def test_read_not_found_error(self):
-
         file_path = f'{Path.home()}/clock-test-read-error.txt'
 
         result, error = File(Path(file_path)).read()
@@ -66,7 +63,6 @@ class TestFile(unittest.TestCase):
 
 
     def test_write_permission_error(self):
-
         file_path = f'{Path.home()}/clock-test-write-error.txt'
         file_content = "Can't touch this!"
         new_content = 'Nailed it.'

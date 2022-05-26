@@ -8,7 +8,6 @@ from src.time import delta_to_time, hmt
 
 class TestTime(unittest.TestCase):
 
-
     def test_time_to_string(self):
         result = str(hmt(1, 1))
         expected = '01:01'
