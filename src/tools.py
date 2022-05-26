@@ -95,8 +95,10 @@ class UI:
         """Alert the user to the state of their save data."""
 
         if error:
+            error_context = 'the given' if error is Error.PROFILE else 'the log'
             IO.error('Failed to save data to the log file.')
-            IO.error(format_error(error, 'the log'))
+            IO.error(format_error(error, error_context))
+
             IO.print('',
                      'Here is the time you just clocked for:',
                      '')

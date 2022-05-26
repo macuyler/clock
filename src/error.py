@@ -9,6 +9,7 @@ class Error(Enum):
 
     PERMISSION = 'Need permission to access {} file.'
     NOT_FOUND = '{} file was not found.'
+    PROFILE = '{} profile is invalid.'
 
 
 def zip_error(callback: Callable, *args) -> (Optional[str], Optional[Error]):
@@ -32,4 +33,4 @@ def zip_error(callback: Callable, *args) -> (Optional[str], Optional[Error]):
 def format_error(error: Error, context: str) -> str:
     """Apply a context to an error to create an error message."""
 
-    return error.value.format(context)
+    return error.value.format(context).capitalize()
