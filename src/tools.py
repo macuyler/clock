@@ -48,8 +48,8 @@ class IO:
         length = max(map(len, [title, *items])) + 2
         span = '━' * length
 
-        top =    '┓' + span + '┏'
-        middle = '├' + span + '┤'
+        top =    '┏' + span + '┓'
+        middle = '┣' + span + '┫'
         bottom = '┗' + span + '┛'
 
         sides = lambda x: f'┃ {x}{" " * (length - len(x) - 2)} ┃'
