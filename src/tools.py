@@ -80,7 +80,14 @@ class UI:
     def show(delta: timedelta):
         """Show a time value to the user."""
 
-        IO.print(f'Clocked in for {delta_to_time(delta)} so far.')
+        IO.print(UI.raw_show(delta))
+
+
+    @staticmethod
+    def raw_show(delta: timedelta):
+        """Get a user friendly message showing time."""
+
+        return f'Clocked in for {delta_to_time(delta)} so far.'
 
 
     @staticmethod
