@@ -104,3 +104,18 @@ You can also set a temporary notification interval using the `--notify-me` flag.
 ```
 clock --notify-me 15
 ```
+
+
+## Testing
+
+Run all the tests:
+
+```
+python3 -m unittest
+```
+
+Run an individual test:
+
+```
+python3 -m tests.test_config
+```
