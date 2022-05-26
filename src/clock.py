@@ -13,9 +13,8 @@ from src.tools import IO, UI
 
 class Clock:
 
-    def __init__(self, profile: Optional[str] = None, notify: Optional[float] = 0.0):
+    def __init__(self, profile: Optional[str] = None):
         self.profile = profile
-        self.notify = notify
         self.config = Config()
         self.start_time = None
         self.stop_time = None
@@ -32,7 +31,7 @@ class Clock:
     def run(self):
         """Run the time tracker."""
 
-        notifier = Notifier(self.notify)
+        notifier = Notifier(self.config.notify_me * 60)
         notifier.start()
         self.start()
 
