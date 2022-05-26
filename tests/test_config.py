@@ -12,8 +12,6 @@ from tests import cleanup, digits, setup
 class TestConfig(unittest.TestCase):
 
     def test_touch_creates_path(self):
-        """Test that __init__ creates missing directories in a path."""
-
         conf_path = f'{Path.home()}/.config/clock/{digits()}/{digits()}/conf'
 
         Config(conf_path)
@@ -26,8 +24,6 @@ class TestConfig(unittest.TestCase):
 
 
     def test_load_and_validate(self):
-        """Test that __init__ loads and validates the config file."""
-
         conf_path = f'{Path.home()}/.config/clock/test.conf'
         log_path = f'{Path.home()}/hours.txt'
 
@@ -46,8 +42,6 @@ class TestConfig(unittest.TestCase):
 
 
     def test_profiles(self):
-        """Test that profiles can be queried."""
-
         conf_path = f'{Path.home()}/.config/clock/test.conf'
         log_path1 = f'{Path.home()}/hours1.txt'
         log_path2 = f'{Path.home()}/hours2.txt'
