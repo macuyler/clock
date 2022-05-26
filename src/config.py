@@ -8,6 +8,7 @@ profile:/Absolute/Path/to/file.txt
 * Example Config:
 work:/Users/user/Documents/work/hours.txt
 school:/Users/user/Documents/school-hours.txt
+_notify_me:60.0
 """
 
 import os
@@ -15,6 +16,7 @@ from pathlib import Path
 from typing import Optional
 
 from src.file import File
+from src.parse import parse
 
 CONFIG_PATH = f'{Path.home()}/.config/clock/clock.conf'
 
@@ -23,6 +25,7 @@ class Config:
     def __init__(self, conf_path: str = CONFIG_PATH):
         self.path = Path(conf_path)
         self.profiles = {}
+        self.notify_me = 0.0
         self._touch()
         self._load()
         self._validate()
@@ -59,6 +62,10 @@ class Config:
                 if delim in line:
                     name, path = line.split(delim)
                     self.profiles[name] = path.strip()
+
+                if '_notify_me' in line:
+                    minutes, = parse('_notify_me:%f', line)
+                    self.notify_me = minutes or 0.0
 
 
     def _validate(self):
