@@ -59,7 +59,7 @@ class Clock:
             clocked = Day(date, time)
 
             error = None
-            log_path = self.config.profile(self.profile)
+            log_path = self.config.profile(self.profile or 'default')
             if log_path:
                 log = Log(log_path)
                 log.add(clocked)

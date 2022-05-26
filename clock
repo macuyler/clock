@@ -12,10 +12,10 @@ def options() -> ArgumentParser:
     """Setup the clock command line argument parser."""
 
     parser = ArgumentParser(description="Clock script command line arguments.")
-    parser.add_argument('profile', help="The name of the profile you want to use.")
+    parser.add_argument('profile', help="The name of the profile you want to use.", nargs="?")
     parser.add_argument('-n', '--notify-me',
-                        type=float,
-                        help="Number of minutes in-between notifications.")
+                        help="Number of minutes in-between notifications.",
+                        type=float)
     return parser
 
 
