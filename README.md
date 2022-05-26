@@ -40,7 +40,6 @@ python3 -m pip install --user requirements.txt
 ```
 
 > Checkout [gitbin](https://github.com/macuyler/gitbin) for quickly adding scripts to your path.
-> `$ gb install https://github.com/macuyler/clock.git`
 
 
 ## Configuration
