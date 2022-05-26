@@ -2,11 +2,11 @@
 
 from collections import deque
 from functools import reduce
-from typing import Callable, Optional, Union
+from typing import Any, Callable, Optional, TypeVar, Union
 
 nop = lambda x: x
 
-Parser = Callable[Optional[str], Optional[int]]
+Parser = Callable[Optional[str], Optional[TypeVar('T')]]
 Pattern = list[Union[str, Parser]]
 
 
@@ -120,23 +120,27 @@ def check(condition: Callable[str, bool]) -> Parser:
     return lambda x: x if x is None or condition(x) else None
 
 
-def int_parser(minimum: Optional[int] = None, maximum: Optional[int] = None) -> Parser:
-    """Create an integer parsing function with the given bounds."""
+def bounds(parser: Parser[Any],
+           minimum: Optional[Any] = None,
+           maximum: Optional[Any] = None) -> Parser[Any]:
+    """Add a min and max boundry to a string parser."""
 
     return compose(check(lambda x: x <= maximum) if maximum else nop,
                    check(lambda x: x >= minimum) if minimum else nop,
-                   int)
+                   parser)
 
 
 def get_pattern(fmt: str) -> Pattern:
     """Generate a pattern from the given format string."""
 
     flags = {
-        'Y': int_parser(minimum=0, maximum=99),
-        'M': int_parser(minimum=1, maximum=12),
-        'D': int_parser(minimum=1, maximum=31),
-        'h': int_parser(minimum=0),
-        'm': int_parser(minimum=0, maximum=59),
+        'i': int,
+        'f': float,
+        'Y': bounds(int, minimum=0, maximum=99),
+        'M': bounds(int, minimum=1, maximum=12),
+        'D': bounds(int, minimum=1, maximum=31),
+        'h': bounds(int, minimum=0),
+        'm': bounds(int, minimum=0, maximum=59),
     }
 
     output = []
@@ -147,6 +151,7 @@ def get_pattern(fmt: str) -> Pattern:
 
         if flagged and char in flags:
             output.append(flags[char])
+            flagged = False
             continue
 
         if char == '%':

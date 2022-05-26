@@ -3,7 +3,9 @@
 import unittest
 from typing import Callable
 
-from src.parse import get_pattern, int_parser, parse
+from src.parse import bounds, get_pattern, parse
+
+int_bounds = lambda x, y: bounds(int, minimum=x, maximum=y)
 
 
 class TestParse(unittest.TestCase):
@@ -11,7 +13,7 @@ class TestParse(unittest.TestCase):
     def test_get_pattern(self):
         fmt = '%M/%D/%Y'
         result = get_pattern(fmt)
-        expected = [int_parser(1, 12), '/', int_parser(1, 31), '/', int_parser(0, 99)]
+        expected = [int_bounds(1, 12), '/', int_bounds(1, 31), '/', int_bounds(0, 99)]
         msg = 'Format strings should be parsed to generate a pattern.'
         self.assertTrue(parsers_match(result[0], expected[0], range(0, 14)), msg)
         self.assertEqual(result[1], expected[1], msg)
@@ -23,7 +25,7 @@ class TestParse(unittest.TestCase):
     def test_pattern_prefix(self):
         fmt = 'Prefix: %M/%D/%Y'
         result = get_pattern(fmt)
-        expected = ['Prefix: ', int_parser(1, 12), '/', int_parser(1, 31), '/', int_parser(0, 99)]
+        expected = ['Prefix: ', int_bounds(1, 12), '/', int_bounds(1, 31), '/', int_bounds(0, 99)]
         msg = 'Format parsing should retain any prefix content.'
         self.assertEqual(result[0], expected[0], msg)
         self.assertTrue(parsers_match(result[1], expected[1], range(0, 14)), msg)
@@ -36,7 +38,7 @@ class TestParse(unittest.TestCase):
     def test_pattern_suffix(self):
         fmt = '%M/%D/%Y suffix...'
         result = get_pattern(fmt)
-        expected = [int_parser(1, 12), '/', int_parser(1, 31), '/', int_parser(0, 99), ' suffix...']
+        expected = [int_bounds(1, 12), '/', int_bounds(1, 31), '/', int_bounds(0, 99), ' suffix...']
         msg = 'Format parsing should retain any suffix content.'
         self.assertTrue(parsers_match(result[0], expected[0], range(0, 14)), msg)
         self.assertEqual(result[1], expected[1], msg)
