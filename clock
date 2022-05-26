@@ -2,12 +2,34 @@
 
 """This is a work timing script for tracking hours."""
 
+from argparse import ArgumentParser
+
 from src.clock import Clock
+from src.tools import IO
+
+
+def options() -> ArgumentParser:
+    """Setup the clock command line argument parser."""
+
+    parser = ArgumentParser(description="Clock script command line arguments.")
+    parser.add_argument('profile', help="The name of the profile you want to use.")
+    parser.add_argument('-n', '--notify-me',
+                        type=float,
+                        help="Number of minutes in-between notifications.")
+    return parser
 
 
 def main():
-    clock = Clock()
-    clock.run()
+    args = options().parse_args()
+    clock = Clock(profile=args.profile, notify_me=args.notify_me)
+
+    try:
+        clock.run()
+    except KeyboardInterrupt:
+        IO.print("") # Clear the input prompt
+        clock.stop()
+
+    clock.save()
 
 if __name__ == '__main__':
     main()
