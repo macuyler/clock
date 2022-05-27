@@ -83,7 +83,7 @@ $ clock [-h] [-n NOTIFY_ME] [profile]
  >
 ```
 
-You have to option to pass in the name of a profile that you want to use.
+You have the option to pass in the name of a profile that you want to use.
 > If you don't specify a profile, it will attempt to find a profile named **default**.
 
 ```
