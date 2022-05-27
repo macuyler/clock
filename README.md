@@ -36,7 +36,7 @@ Clone the repo and install the requirements.
 ```
 git clone https://github.com/macuyler/clock.git
 cd clock
-python3 -m pip install --user requirements.txt
+python3 -m pip install --user -r requirements.txt
 ```
 
 > Checkout [gitbin](https://github.com/macuyler/gitbin) for quickly adding scripts to your path.
