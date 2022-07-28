@@ -11,20 +11,19 @@ from src.time import delta_to_time
 
 
 class IOPrefix(Enum):
-    INFO =  '[*]'
-    ERROR = '[!]'
+    INFO =  '[*] '
+    ERROR = '[!] '
+    NONE = ''
 
 
 class IO:
     """Custom input/output utilities."""
 
     @staticmethod
-    def print(*lines: str, prefix: IOPrefix = None):
+    def print(*lines: str, prefix: IOPrefix = IOPrefix.NONE):
         """Print lines to user over stderr."""
 
-        for line in lines:
-            out = f'{prefix.value} {line}' if prefix else line
-            print(out, file=sys.stderr)
+        print('\n'.join(map(lambda x: f'{prefix.value}{x}', lines)), file=sys.stderr)
 
 
     @staticmethod

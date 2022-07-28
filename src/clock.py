@@ -58,14 +58,12 @@ class Clock:
             time = delta_to_time(self.stop_time - self.start_time)
             clocked = Day(date, time)
 
-            error = None
+            error = Error.NO_LOG_FILE
             log_path = self.config.profile(self.profile or 'default')
             if log_path:
                 log = Log(log_path)
                 log.add(clocked)
                 error = log.save()
-            else:
-                error = Error.NO_LOG_FILE
 
             UI.save(clocked, error)
 
